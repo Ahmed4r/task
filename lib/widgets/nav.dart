@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fastapi/screens/homepage.dart';
-import 'package:flutter_fastapi/screens/profile_page.dart';
+import 'package:flutter_fastapi/screens/plan_selected.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class NavigationApp extends StatefulWidget {
+  static const String routeName = '/navigation-app';
   const NavigationApp({super.key});
 
   @override
@@ -18,7 +19,7 @@ class _NavigationAppState extends State<NavigationApp> {
     const ChatPage(),
     const AddAdsPage(),
     const MyAdsPage(),
-    const ProfilePage(),
+    const PlanSelected(),
   ];
 
   @override

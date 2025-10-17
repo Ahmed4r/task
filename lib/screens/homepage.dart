@@ -1,16 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fastapi/screens/filter_page.dart';
 import 'package:flutter_fastapi/shared/app_colors.dart';
 import 'package:flutter_fastapi/shared/text_styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Homepage extends StatefulWidget {
-  Homepage({super.key});
+  static const String routeName = '/homepage';
+  const Homepage({super.key});
 
   @override
   State<Homepage> createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
+  Widget buildHeader() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      child: Row(
+        children: [
+          Text('استكشف العروض', style: TextStyles.black16weight500),
+          const Spacer(),
+          Text(
+            'الكل',
+            style: TextStyles.grey16weight700.copyWith(color: AppColors.grey),
+          ),
+          SizedBox(width: 8.w),
+          IconButton(
+            icon: Icon(Icons.arrow_forward, color: AppColors.grey),
+            onPressed: () {
+              Navigator.pushNamed(context, FilterPage.routeName);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   final List<String> categories = [
     'كل العروض',
     'ملابس',
@@ -42,19 +67,22 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              buildHeader(),
-              SizedBox(height: 5.h),
-              buildCategoryItems(categories),
-              SizedBox(height: 5.h),
-              buildImageItems(images),
-              SizedBox(height: 5.h),
-              buildFreeShippingBanner(),
-              SizedBox(height: 5.h),
-              buildProdcutList(products),
-            ],
+          child: Directionality(
+            textDirection: TextDirection.rtl,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                buildHeader(),
+                SizedBox(height: 5.h),
+                buildCategoryItems(categories),
+                SizedBox(height: 5.h),
+                buildImageItems(images),
+                SizedBox(height: 5.h),
+                buildFreeShippingBanner(),
+                SizedBox(height: 5.h),
+                buildProdcutList(products),
+              ],
+            ),
           ),
         ),
       ),
@@ -62,54 +90,37 @@ class _HomepageState extends State<Homepage> {
   }
 }
 
-Widget buildHeader() {
-  return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-    child: Row(
-      children: [
-        Text('استكشف العروض', style: TextStyles.black16weight500),
-        const Spacer(),
-        Text(
-          'الكل',
-          style: TextStyles.grey16weight700.copyWith(color: AppColors.grey),
-        ),
-        SizedBox(width: 8.w),
-        Icon(Icons.arrow_forward, color: AppColors.grey),
-      ],
-    ),
-  );
-}
-
 Widget buildCategoryItems(List<String> categories) {
   return SizedBox(
     height: 61.h,
-    width: 11.w,
+    width: double.infinity,
     child: ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: categories.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: EdgeInsets.only(
-            left: 6.w,
-            right: 6.w,
-            top: 8.h,
-            bottom: 8.h,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 8.h),
           child: Container(
-            width: 120.w,
+            padding: EdgeInsets.symmetric(horizontal: 12.w),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4.r),
-              color: index == 0 ? Color(0xfffef7f3) : Colors.transparent,
+              color: index == 0
+                  ? const Color.fromRGBO(249, 91, 28, 0.05)
+                  : Colors.transparent,
               border: Border.all(
                 width: 1,
-                color: index == 0 ? Color(0xffebe6f2) : Colors.grey.shade300,
+                color: index == 0
+                    ? Color.fromARGB(255, 242, 236, 230)
+                    : Colors.grey.shade300,
               ),
             ),
             child: Center(
               child: Text(
                 categories[index],
                 style: TextStyles.grey14weight500.copyWith(
-                  color: index == 0 ? Color(0xffF95B1C) : AppColors.grey,
+                  color: index == 0
+                      ? Color(0xffF95B1C)
+                      : const Color.fromRGBO(9, 15, 31, 0.5),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -199,175 +210,161 @@ Widget buildProdcutList(products) {
 }
 
 Widget buildProductItem(List<String> products, {required int index}) {
+  String newprice = '32,000,000';
+  String oldprice = '60,000,000';
   return Container(
     decoration: BoxDecoration(
       border: Border.all(color: AppColors.grey.shade200, width: 2),
       borderRadius: BorderRadius.circular(4.r),
     ),
-    margin: EdgeInsets.all(4.w), // Reduced margin
+    padding: EdgeInsets.all(6.w),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(
-          flex: 10,
+        Flexible(
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(8.r),
             child: Image.asset(
               products[index],
-              fit: BoxFit.contain,
+              fit: BoxFit.cover,
               width: double.infinity,
             ),
           ),
         ),
-        SizedBox(height: 6.h), // Reduced spacing
-        Expanded(
-          flex: 1,
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'جاكيت من الصوف مناسب',
-                  style: TextStyles.black14weight500,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
+        SizedBox(height: 4.h),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                'جاكيت من الصوف مناسب',
+                style: TextStyles.black14weight500,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
-              SizedBox(width: 4.w),
-              Image.asset(
-                'assets/icons/discount.png',
-                width: 20.w,
-                height: 20.h,
-              ), // Smaller icon
-            ],
-          ),
+            ),
+            SizedBox(width: 4.w),
+            Image.asset('assets/icons/discount.png', width: 18.w, height: 18.h),
+          ],
         ),
         SizedBox(height: 4.h),
-        Expanded(
-          flex: 1,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: RichText(
-                  text: TextSpan(
-                    style: TextStyle(fontSize: 18, color: Colors.black),
-                    children: [
-                      TextSpan(
-                        text: '32,000,000جم',
-                        style: TextStyles.black14weight500.copyWith(
-                          color: Colors.red,
-                        ),
-                      ),
-                      TextSpan(
-                        text: '/60,000,00',
-                        style: TextStyles.grey12weight400.copyWith(
-                          decoration: TextDecoration.overline,
-                          decorationThickness: 1.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 24.w,
-                height: 24.h,
-                child: IconButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.favorite_border_outlined,
-                    color: Colors.black,
-                    size: 18.sp, // Smaller icon
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Row(
-            children: [
-              Icon(
-                Icons.local_fire_department_outlined,
-                color: Colors.grey,
-                size: 12.sp, // Smaller icon
-              ),
-              SizedBox(width: 4.w),
-              Expanded(
-                child: Text(
-                  'تم بيع 3.3k+',
-                  style: TextStyles.grey10weight400.copyWith(
-                    height: 2,
-                  ), // Smaller font
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        SizedBox(height: 6.h),
-
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-          child: Row(
-            children: [
-              Stack(
-                alignment: Alignment.bottomRight,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Row(
+                textDirection: TextDirection.rtl,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    height: 28.h,
-                    width: 28.w,
-                    decoration: BoxDecoration(
-                      color: AppColors.lightBlue,
-                      borderRadius: BorderRadius.circular(20.r),
+                  Text(
+                    '$newprice جم/',
+                    style: TextStyles.black14weight500.copyWith(
+                      color: Colors.red,
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.all(4.w),
-                      child: Image.asset('assets/icons/save.png'),
-                    ),
+
+                    maxLines: 1,
                   ),
-                  Positioned(
-                    bottom: 18,
-                    child: Container(
-                      height: 12.h,
-                      width: 12.w,
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(15.r),
+                  SizedBox(width: 2.w),
+                  Flexible(
+                    child: Text(
+                      '$oldprice',
+                      style: TextStyle(
+                        decoration: TextDecoration.lineThrough,
+                        fontSize: 12.sp,
+                        color: Colors.grey,
                       ),
-                      child: Center(
-                        child: Icon(
-                          Icons.check,
-                          color: Colors.white,
-                          size: 8.sp,
-                        ),
-                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                   ),
                 ],
               ),
-
-              Spacer(),
-              Container(
-                height: 28.h,
-                width: 40.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6.r),
-                  border: Border.all(color: AppColors.grey.shade200, width: 2),
-                ),
-                // cart icon
-                child: Padding(
-                  padding: EdgeInsets.all(4.w),
-                  child: Image.asset('assets/icons/cart.png'),
+            ),
+            SizedBox(width: 2.w),
+            InkWell(
+              onTap: () {},
+              child: Padding(
+                padding: EdgeInsets.all(2.w),
+                child: Icon(
+                  Icons.favorite_border_outlined,
+                  color: Colors.black,
+                  size: 24.sp,
                 ),
               ),
-              SizedBox(width: 10.w),
-              Image.asset('assets/icons/logo.png', scale: 3),
-            ],
-          ),
+            ),
+          ],
+        ),
+        SizedBox(height: 4.h),
+        Row(
+          children: [
+            Icon(
+              Icons.local_fire_department_outlined,
+              color: Colors.grey,
+              size: 12.sp,
+            ),
+            SizedBox(width: 2.w),
+            Expanded(
+              child: Text(
+                'تم بيع 3.3k+',
+                style: TextStyles.grey10weight400,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 4.h),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  height: 22.h,
+                  width: 22.w,
+                  decoration: BoxDecoration(
+                    color: AppColors.lightBlue,
+                    borderRadius: BorderRadius.circular(20.r),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(3.w),
+                    child: Image.asset('assets/icons/save.png'),
+                  ),
+                ),
+                Positioned(
+                  child: Container(
+                    height: 10.h,
+                    width: 10.w,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(10.r),
+                      border: Border.all(color: Colors.white, width: 1),
+                    ),
+                    child: Icon(Icons.check, color: Colors.white, size: 5.sp),
+                  ),
+                ),
+              ],
+            ),
+            Spacer(),
+            Container(
+              height: 26.h,
+              width: 26.w,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6.r),
+                border: Border.all(color: AppColors.grey.shade200, width: 1.5),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(5.w),
+                child: Image.asset('assets/icons/add_shopping_cart.png'),
+              ),
+            ),
+            SizedBox(width: 4.w),
+            SizedBox(
+              height: 18.h,
+              width: 18.w,
+              child: Image.asset('assets/icons/logo.png', fit: BoxFit.contain),
+            ),
+          ],
         ),
       ],
     ),
