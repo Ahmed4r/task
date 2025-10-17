@@ -13,16 +13,6 @@ class PlanSelected extends StatefulWidget {
 }
 
 class _PlanSelectedState extends State<PlanSelected> {
-  bool standardPlan = false;
-
-  bool plusPlan = false;
-
-  bool extraPlan = false;
-
-  bool superPlan = false;
-
-  bool isSelected = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,17 +33,34 @@ class _PlanSelectedState extends State<PlanSelected> {
                 'صلاحية الأعلان 30 يوم',
                 '3000 ج.م',
               ),
-              buildPlusPlan(),
               buildExtraPlan(),
-              buildSuperPlan(),
+              Stack(
+                children: [
+                  buildPlusPlan(),
+                  Positioned(
+                    right: 0,
+                    top: -7,
+                    child: Image.asset('assets/images/Plan Offer Badge.png'),
+                  ),
+                ],
+              ),
+              Stack(
+                children: [
+                  buildSuperPlan(),
+                  Positioned(
+                    right: 0,
+                    top: -3,
+                    child: Image.asset('assets/images/super_high_view.png'),
+                  ),
+                ],
+              ),
               buildCustomPlan(),
               CustomeButton(
                 title: 'التالى',
                 onTap: () {},
                 icon: Icons.arrow_forward_rounded,
               ),
-
-              // superior plan
+            
             ],
           ),
         ),
@@ -140,10 +147,8 @@ Widget buildPlanItem(String title, List<Widget> row, String price) {
         Row(
           children: [
             Checkbox(
-              value: false,
-              onChanged: (value) {
-               
-              },
+              value: true,
+              onChanged: (value) {},
               checkColor: Colors.white,
               fillColor: WidgetStatePropertyAll(AppColors.blue),
             ),
@@ -184,12 +189,7 @@ Widget buildPlanRow(String image, String title, {String subtitle = ''}) {
             overflow: TextOverflow.ellipsis,
           ),
           if (subtitle.isNotEmpty)
-            Text(
-              subtitle,
-              style: TextStyles.orange14weight500,
-              maxLines: 1,
-             
-            ),
+            Text(subtitle, style: TextStyles.orange14weight500, maxLines: 1),
         ],
       ),
     ],
@@ -241,7 +241,7 @@ Widget buildExtraPlan() {
           'تثبيت فى مقاول صحى',
           subtitle: '( خلال ال48 ساعة القادمة )',
         ),
-      ], '8500 ج.م'),
+      ], '3500 ج.م'),
     ],
   );
 }

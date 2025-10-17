@@ -35,6 +35,7 @@ class TaskApp extends StatelessWidget {
           theme: ThemeData(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
+            scaffoldBackgroundColor: Color(0xffffffff),
             appBarTheme: AppBarTheme(
               scrolledUnderElevation: 0,
               backgroundColor: Colors.transparent,

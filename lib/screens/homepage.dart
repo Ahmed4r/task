@@ -81,6 +81,7 @@ class _HomepageState extends State<Homepage> {
                 buildFreeShippingBanner(),
                 SizedBox(height: 5.h),
                 buildProdcutList(products),
+                Text('data'),
               ],
             ),
           ),
